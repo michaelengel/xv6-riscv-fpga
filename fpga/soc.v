@@ -6,9 +6,9 @@ SOC - System on chip
 - BOOR BRAM preloaded with boot loader (12kB)
 - CLINT Core Level Interrupt Controller
 - PLIC Platform Level Interrupt Controller
-- SRAM 512kB
+- SRAM 1024kB
 - UART Universal Asynchronus Receive Transmit controller
-- SPI Serial Peripherial Interface controller (SD-Card) 
+- SPI Serial Peripherial Interface controller (SD-Card)
 
 Memory map:
 dev   base address  size
@@ -18,7 +18,7 @@ CLINT 02000000      0xFFFF
 PLIC  0C000000      huge
 UART  10000000      8 Byte
 SPI   10001000      5 Byte
-SRAM  80000000      512 KByte
+SRAM  80000000      1024 KByte
 */
 
 `default_nettype none
@@ -27,7 +27,7 @@ module soc(
 	input	i_rst,
 	input	i_uart_rx,
 	output	o_uart_tx,
-	output [17:0]	o_sram_a,
+	output [18:0]	o_sram_a,
 	inout  [15:0]	io_sram_d,
 	output	o_sram_csn,
 	output	o_sram_oen,
@@ -63,7 +63,7 @@ assign sba_ack = addr_is_bram ? bram_ack:
 				 addr_is_plic ? plic_ack:
 				 addr_is_spi ? spi_ack:
 				 1'd0;
-    
+
 assign sba_dat_r =	addr_is_bram ? bram_dat_r:
 				 	addr_is_uart ? uart_dat_r:
 				 	addr_is_sram ? sram_dat_r:
@@ -77,7 +77,7 @@ assign o_led = {rv_mode[1],rv_mode[0]};
 // rv32i risc-v cpu
 rv32 RV32(
     .i_rst(sba_rst),
-	.i_clk(sba_clk),			
+	.i_clk(sba_clk),
 	.o_addr(sba_addr),
 	.o_dat_w(sba_dat_w),
 	.o_we(sba_we),
@@ -90,10 +90,10 @@ rv32 RV32(
 	.i_meip(plic_ext_int_m),
 	.i_seip(plic_ext_int_s)
 );
-   
+
 // BRAM 12 kb of ram preloaded with boot loader
 reg [31:0] BRAM[0:3071];
-initial $readmemh("firmware.hex",BRAM); 
+initial $readmemh("firmware.hex",BRAM);
 wire bram_stb = addr_is_bram & sba_stb;
 wire [11:0] bram_addr = sba_addr[13:2]-1024;
 always @(posedge i_clk) begin
@@ -149,7 +149,7 @@ plic PLIC(
 	.o_ext_int_s(plic_ext_int_s)
 );
 
-// SRAM 512 kb
+// SRAM 1024 kb
 wire [31:0] sram_dat_r;
 wire sram_ack;
 
@@ -161,14 +161,14 @@ sram SRAM(
 	.o_sram_csn(o_sram_csn),
 	.o_sram_oen(o_sram_oen),
 	.o_sram_wen(o_sram_wen),
-	.i_addr(sba_addr[21:2]),
+	.i_addr(sba_addr[22:2]),
 	.o_dat_r(sram_dat_r),
 	.i_dat_w(sba_dat_w),
 	.i_stb(addr_is_sram & sba_stb),
 	.i_we(sba_we),
 	.o_ack(sram_ack)
 );
-  
+
 // UART
 wire [31:0] uart_dat_r;
 wire uart_ack;

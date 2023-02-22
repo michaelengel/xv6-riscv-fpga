@@ -1,8 +1,8 @@
 OBJS =  clint.v plic.v rv32.v soc.v spi.v sram.v uart.v vma.v
 
-TOOLPREFIX = /opt/oss-cad-suite/bin/
-LIBS = /opt/oss-cad-suite/lib/
-YOSYS_ICE40 = /opt/oss-cad-suite/share/yosys/ice40/
+#TOOLPREFIX = /opt/oss-cad-suite/bin/
+#LIBS = /opt/oss-cad-suite/lib/
+#YOSYS_ICE40 = /opt/oss-cad-suite/share/yosys/ice40/
 
 YOSYS    = $(TOOLPREFIX)yosys
 NEXTPNR  = $(TOOLPREFIX)nextpnr-ice40
@@ -31,10 +31,10 @@ hardware.bin:	$(OBJS) pll.v top.v ice40hx8k_evb.pcf
 
 
 upload:			hardware.bin
-	$(ICEPROG) hardware.bin
+	icoprog -f < hardware.bin
 
 run:	
-	tio -m INLCRNL /dev/ttyACM0
+#	tio -m INLCRNL /dev/ttyACM0
 
 clean:
 	rm -f *.asc *.bin *.json *.vcd *.out

@@ -32,8 +32,8 @@ OBJS = \
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
-TOOLPREFIX = /opt/riscv/bin/riscv64-unknown-elf-
-LIBGCC = /opt/riscv/lib/gcc/riscv64-unknown-elf/12.1.0/rv32i/ilp32
+TOOLPREFIX = /opt/riscv64/bin/riscv64-unknown-elf-
+LIBGCC = /opt/riscv64/lib/gcc/riscv64-unknown-elf/12.1.0/rv32i/ilp32
 
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)gas

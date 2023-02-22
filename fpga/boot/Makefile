@@ -1,6 +1,6 @@
 OBJS =  start.S main.c printf.c stdio.c spi.c 
 
-TOOLPREFIX = /opt/riscv/bin/riscv64-unknown-elf-
+TOOLPREFIX = /opt/riscv64/bin/riscv64-unknown-elf-
 
 CFLAG = -Wall -O0 -march=rv32i -mabi=ilp32 --freestanding -nostartfiles -T riscv.ld
 

@@ -10,7 +10,7 @@ module top(
    input wire uart_rx,
    output wire uart_tx,
    inout [15:0] sram_d,
-   output [17:0] sram_a,
+   output [18:0] sram_a,
    output wire sram_wen,
    output wire sram_oen,
    output wire sram_csn,
@@ -19,13 +19,18 @@ module top(
    input sd_miso,
    output sd_mosi,
    output sd_sck,
-   output sd_ss
+   output sd_ss,
+   output sram_lbn,
+   output sram_ubn,
 );
 
 //reset
 reg [24:0]	rst_cnt = 0;
 wire		rst = ! (& rst_cnt);
 always @(posedge o_clk) rst_cnt <= rst_cnt + {23'd0,rst};
+
+//assign sram_a[18] = 1'b0;
+assign {sram_ubn, sram_lbn} = 2'b00;
 
 //PLL   
 wire  o_clk;

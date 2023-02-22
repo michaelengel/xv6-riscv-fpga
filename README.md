@@ -1,6 +1,6 @@
 # xv6-riscv-fpga
 
-Build a RISC-V computer system on fpga iCE40HX8K-EVB and run UNIX xv6 using only FOSS (free and open source hard- and software).
+Build a RISC-V computer system on fpga icoboard v1.3 (8Mbit SRAM) and run UNIX xv6 using only FOSS (free and open source hard- and software).
 
 ![](cube/cube.jpg)
 
@@ -22,16 +22,18 @@ Although our CPU does not implement multiplication and floating point operation 
 
 ## 01_hardware
 
+Check for icoboard into pcf file. I have used pmods from digilent for sdcard and uart.
+
 The hardware consists of three little boards available at Olimex Ltd.
 
 * iCE40HX8K-EVB: This development board contains the fpga chip iCE40HX8K plus a 512k Byte memory chip used as RAM.
 
 * Olimexino 32u4: This arduino like board is used
-  
+
   1. as programmer, to upload the fpga bitstream file to the iCE40HX8K-EVB board.
-  
+
   2. as UART bridge, to connect a terminal to the RISCV-V CPU running UNIX xv6.
-  
+
   3. to power everything over USB through the UEXT cable, connect the solder jumper `3.3V_E1` on iCE40HX8K-EVB. (compare schematic of [iCE40HX8K-EVB](doc/iCE40HX8K-EVB_Rev_B.pdf))
 
 * SD-CARD: This little board holds an SD-Card containing the complete file system of UNIX xv6.
@@ -75,7 +77,7 @@ Attention: Download rv64imc with multilib rv32i and copy folder to `/opt/riscv`
 
 ### 03.1_compile bootloader
 
-* Build the firmware, which implements a bootloader, that reads the SD-CARD. The bootloader than seaches for an ELF file containing the kernel xv6. Loads the kernel into memory and starts the kernel. 
+* Build the firmware, which implements a bootloader, that reads the SD-CARD. The bootloader than seaches for an ELF file containing the kernel xv6. Loads the kernel into memory and starts the kernel.
 
 ```
 $ cd fpga/boot
@@ -103,7 +105,7 @@ $ make
 
 ### 03.3_compile xv6-riscv
 
-* Build the software, composed of kernel and user programms and write everything on the file system. 
+* Build the software, composed of kernel and user programms and write everything on the file system.
 
 ```
 $ cd xv6-riscv
@@ -123,8 +125,8 @@ Now connect to RV32ia_zicsr with USB and start a terminal session (i.e. tio). St
 $ tio -m INLCRNL /dev/ttyACM0
  ___ ___ ___  ___  __   __
 | _ \_ _/ __|/ __|_\ \ / /
-|   /| |\__ \ (_|___\ V / 
-|_|_\___|___/\___|   \_/  
+|   /| |\__ \ (_|___\ V /
+|_|_\___|___/\___|   \_/
 
 Processor: rv32ia @32MHz V1.2
 
@@ -138,7 +140,7 @@ Processor: rv32ia @32MHz V1.2
 sb_magic 0x10203040.OK
 e_magic  0x464c457f..OK
    p_type     p_addr     p_filesz   load
-0  0x70000003 0x00000000 0x00000025 
+0  0x70000003 0x00000000 0x00000025
 1  0x00000001 0x80000000 0x00009138 OK
 2  0x00000001 0x8000a000 0x0000003c OK
 e_entry  0x80000000
@@ -148,7 +150,7 @@ Welcome to rv32ia 6th Edition UNIX
 xv6 kernel is booting
 
 init: starting sh
-$ 
+$
 ```
 
 ### 04.2_unix commands
@@ -230,12 +232,12 @@ You will need a RISC-V "newlib" tool chain from
 https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
 riscv64-softmmu. Once they are installed, and in your shell
 search path, you can run "make qemu".
-$ 
+$
 ```
 
 ### 04.3_run LISP
 
-and even run LISP on a computer system that runs UNIX on a home made CPU! 
+and even run LISP on a computer system that runs UNIX on a home made CPU!
 
 ```
 $ lisp
@@ -246,7 +248,7 @@ size of float: 4
 size of (char*): 4
 lisp> (+ 2 4)
 6
-lisp> 
+lisp>
 ```
 
 ## 05_cube
@@ -265,11 +267,11 @@ The subfolder `files/` containes the blender files and the corresponging STL-fil
 The modules are mounted on trays with little screws (M3x5/M2.4x5 selfcutting). From left to right:
 
 1. Olimexino 32u4: Programmer/UART bridge
-2. iCE40HX8K-EVB: fpga development board
+2. icoboard v1.3: fpga development board
 3. SD-Card reader
 4. Thinker
 
-# 
+#
 
 ![](cube/inside.jpg)
 
@@ -282,10 +284,11 @@ On the rear cover you see connectors for power supply (5V), 34 pin GPIO and the 
 
 ![](cube/rear.jpg)
 
-# 
+#
 
 ## 06_License
 
 Copyright 2023 Michael Schröder mi.schroeder@netcologne.de
+Copyright 2023 Hirosh Dabui hirosh.dabui.de,  adjustment for icoboard v1.3
 
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Namensnennung 4.0 International Lizenz</a>.
