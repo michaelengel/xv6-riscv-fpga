@@ -2,17 +2,17 @@ OBJS =  start.S main.c printf.c stdio.c spi.c
 
 TOOLPREFIX = /opt/riscv64/bin/riscv64-unknown-elf-
 
-CFLAG = -Wall -O0 -march=rv32i -mabi=ilp32 --freestanding -nostartfiles -T riscv.ld
+CFLAG = -Wall -O0 -march=rv32i -mabi=ilp32 --freestanding -nostartfiles -Triscv.ld -Wl,--no-warn-rwx-segments
 
 CC = $(TOOLPREFIX)gcc 
 
 all:	firmware
 
-firmware.elf:	$(OBJECTS)
+firmware.elf:	$(OBJS) riscv.ld
 	$(CC) $(CFLAG) $(OBJS) -o $@
 
 firmware.hex:	firmware.elf
-	$(TOOLPREFIX)objcopy -j .mem firmware.elf -O binary firmware.bin
+	$(TOOLPREFIX)objcopy -j .boot firmware.elf -O binary firmware.bin
 	xxd -e firmware.bin | cut -c 11-46 > firmware.hex
 
 %.obj:  %.elf
